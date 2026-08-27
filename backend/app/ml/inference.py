@@ -34,7 +34,13 @@ class MLInference:
         df = pd.DataFrame([student_data])
         X_processed = self.preprocessor.transform(df)
         prob = self.risk_model.predict_proba(X_processed)[0]
-        pass_prob = prob[1]
+        pass_prob = float(prob[1])
+        
+        # Normalize if model returned percentage instead of [0, 1]
+        if pass_prob > 1.0:
+            pass_prob = pass_prob / 100.0
+            
+        pass_prob = max(0.0, min(1.0, pass_prob))
         
         if pass_prob >= 0.70:
             risk_level = "LOW"
@@ -129,9 +135,13 @@ class MLInference:
         predicted_marks = self.marks_model.predict(X_processed)[0]
         predicted_gpa = self.gpa_model.predict(X_processed)[0]
         
+        # Apply logical bounds
+        predicted_marks = max(0.0, min(100.0, float(predicted_marks)))
+        predicted_gpa = max(0.0, min(4.0, float(predicted_gpa)))
+        
         return {
-            "predicted_marks": round(float(predicted_marks), 2),
-            "predicted_gpa": round(float(predicted_gpa), 2)
+            "predicted_marks": round(predicted_marks, 2),
+            "predicted_gpa": round(predicted_gpa, 2)
         }
         
     def get_comparison_report(self):

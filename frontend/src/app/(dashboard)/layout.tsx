@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -16,9 +16,17 @@ import {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [userName, setUserName] = useState('Success Explorer');
+
+  useEffect(() => {
+    const storedName = localStorage.getItem('user_name');
+    if (storedName) {
+      setUserName(storedName);
+    }
+  }, []);
 
   const navItems = [
-    { name: 'Overview', href: '/', icon: BookOpen },
+    { name: 'Overview', href: '/overview', icon: BookOpen },
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Study Planner', href: '/study-planner', icon: CalendarCheck },
     { name: 'Exam Prep', href: '/exam-prep', icon: GraduationCap },
@@ -65,10 +73,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="p-4 border-t border-zinc-800/60">
           <div className="flex items-center gap-3 bg-[#111622] border border-zinc-800 rounded-xl p-3">
             <div className="h-8 w-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-              S
+              {userName.charAt(0).toUpperCase()}
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-semibold text-white">Success Explorer</span>
+              <span className="text-sm font-semibold text-white truncate max-w-[120px]">{userName}</span>
               <span className="text-[10px] text-zinc-500">Active Learner</span>
             </div>
           </div>
@@ -99,11 +107,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <span className="text-sm text-zinc-500">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}</span>
             <div className="flex items-center gap-3 border-l border-zinc-800 pl-6">
               <div className="flex flex-col text-right">
-                <span className="text-sm font-bold text-white leading-tight">Success Explorer</span>
+                <span className="text-sm font-bold text-white leading-tight truncate max-w-[150px]">{userName}</span>
                 <span className="text-[10px] text-zinc-500">Student Profile</span>
               </div>
               <div className="h-8 w-8 bg-indigo-900/50 rounded flex items-center justify-center border border-indigo-500/30 text-indigo-400 font-bold text-sm">
-                S
+                {userName.charAt(0).toUpperCase()}
               </div>
             </div>
           </div>

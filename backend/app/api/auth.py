@@ -7,11 +7,13 @@ from pydantic import BaseModel
 router = APIRouter()
 
 class UserCreate(BaseModel):
+    full_name: str
     email: str
     password: str
 
 class UserResponse(BaseModel):
     id: int
+    full_name: str | None = None
     email: str
     is_active: bool
 
@@ -27,7 +29,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     # In a real app, hash the password
     fake_hashed_password = user.password + "notreallyhashed"
     
-    new_user = User(email=user.email, hashed_password=fake_hashed_password)
+    new_user = User(email=user.email, full_name=user.full_name, hashed_password=fake_hashed_password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

@@ -25,10 +25,11 @@ export default function Login() {
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem('user_id', data.id);
+        localStorage.setItem('user_name', data.full_name || 'Student');
         
         // If they already have a profile, ideally we'd check, but for MVP we assume Dashboard
         // Or if they just registered, they go to profile. Let's send them to Dashboard.
-        router.push('/overview'); 
+        router.push('/dashboard'); 
       } else {
         const err = await res.json();
         setError(err.detail || 'Login failed');

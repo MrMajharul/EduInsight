@@ -79,10 +79,25 @@ export default function Dashboard() {
   };
 
   const handleChange = (e: any) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    
+    if (["study_frequency", "class_participation", "assignment_completion"].includes(name)) {
+      setMlInputs(prev => ({ ...prev, [name]: value }));
+      return;
+    }
+    
+    let numVal = Number(value);
+    
+    // Logical bounds checking
+    if (name.includes('gpa') && numVal > 4.0) numVal = 4.0;
+    if ((name.includes('marks') || name.includes('pct') || name.includes('average')) && numVal > 100) numVal = 100;
+    if (name === 'study_hours' && numVal > 24) numVal = 24;
+    if (name === 'course_load' && numVal > 10) numVal = 10;
+    if (numVal < 0) numVal = 0;
+
     setMlInputs(prev => ({
       ...prev,
-      [name]: ["study_frequency", "class_participation", "assignment_completion"].includes(name) ? value : Number(value)
+      [name]: value.toString().endsWith('.') ? value : numVal
     }));
   };
 

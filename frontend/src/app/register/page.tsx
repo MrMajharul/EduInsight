@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, ArrowRight, GraduationCap } from 'lucide-react';
+import { Mail, Lock, ArrowRight, GraduationCap, User } from 'lucide-react';
 
 export default function Register() {
   const router = useRouter();
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -19,13 +20,14 @@ export default function Register() {
       const res = await fetch('http://localhost:8000/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ full_name: fullName, email, password })
       });
 
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem('user_id', data.id);
-        router.push('/profile'); // Redirect to profile setup
+        localStorage.setItem('user_name', data.full_name || 'Student');
+        router.push('/login'); // Redirect to login
       } else {
         const err = await res.json();
         setError(err.detail || 'Registration failed');
@@ -56,6 +58,21 @@ export default function Register() {
         {error && <div className="mb-4 p-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-lg text-sm text-center relative z-10">{error}</div>}
 
         <form onSubmit={handleRegister} className="relative z-10 space-y-4">
+          <div>
+            <label className="block text-zinc-400 text-sm mb-1.5 ml-1">Full Name</label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+              <input 
+                type="text" 
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                placeholder="John Doe"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-zinc-400 text-sm mb-1.5 ml-1">Email</label>
             <div className="relative">
@@ -91,7 +108,7 @@ export default function Register() {
             disabled={loading}
             className="w-full mt-6 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            {loading ? 'Creating Account...' : 'Continue to Profile'} <ArrowRight size={18} />
+            {loading ? 'Creating Account...' : 'Create Account'} <ArrowRight size={18} />
           </button>
         </form>
 
