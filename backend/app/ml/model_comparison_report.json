@@ -1,0 +1,167 @@
+{
+    "best_model": "Stacking",
+    "models": [
+        {
+            "model_name": "Logistic Regression",
+            "accuracy": 85.0,
+            "precision": 88.45,
+            "recall": 93.28,
+            "f1_score": 90.8,
+            "roc_auc": 88.92,
+            "confusion_matrix": [
+                [
+                    33,
+                    29
+                ],
+                [
+                    16,
+                    222
+                ]
+            ]
+        },
+        {
+            "model_name": "KNN",
+            "accuracy": 81.67,
+            "precision": 83.52,
+            "recall": 95.8,
+            "f1_score": 89.24,
+            "roc_auc": 79.4,
+            "confusion_matrix": [
+                [
+                    17,
+                    45
+                ],
+                [
+                    10,
+                    228
+                ]
+            ]
+        },
+        {
+            "model_name": "Naive Bayes",
+            "accuracy": 84.0,
+            "precision": 89.26,
+            "recall": 90.76,
+            "f1_score": 90.0,
+            "roc_auc": 84.81,
+            "confusion_matrix": [
+                [
+                    36,
+                    26
+                ],
+                [
+                    22,
+                    216
+                ]
+            ]
+        },
+        {
+            "model_name": "Decision Tree",
+            "accuracy": 79.0,
+            "precision": 86.61,
+            "recall": 86.97,
+            "f1_score": 86.79,
+            "roc_auc": 76.58,
+            "confusion_matrix": [
+                [
+                    30,
+                    32
+                ],
+                [
+                    31,
+                    207
+                ]
+            ]
+        },
+        {
+            "model_name": "SVM",
+            "accuracy": 84.67,
+            "precision": 87.8,
+            "recall": 93.7,
+            "f1_score": 90.65,
+            "roc_auc": 85.58,
+            "confusion_matrix": [
+                [
+                    31,
+                    31
+                ],
+                [
+                    15,
+                    223
+                ]
+            ]
+        },
+        {
+            "model_name": "Random Forest",
+            "accuracy": 85.0,
+            "precision": 86.42,
+            "recall": 96.22,
+            "f1_score": 91.05,
+            "roc_auc": 86.29,
+            "confusion_matrix": [
+                [
+                    26,
+                    36
+                ],
+                [
+                    9,
+                    229
+                ]
+            ]
+        },
+        {
+            "model_name": "AdaBoost",
+            "accuracy": 84.0,
+            "precision": 87.4,
+            "recall": 93.28,
+            "f1_score": 90.24,
+            "roc_auc": 87.35,
+            "confusion_matrix": [
+                [
+                    30,
+                    32
+                ],
+                [
+                    16,
+                    222
+                ]
+            ]
+        },
+        {
+            "model_name": "Gradient Boosting",
+            "accuracy": 84.0,
+            "precision": 87.4,
+            "recall": 93.28,
+            "f1_score": 90.24,
+            "roc_auc": 85.55,
+            "confusion_matrix": [
+                [
+                    30,
+                    32
+                ],
+                [
+                    16,
+                    222
+                ]
+            ]
+        },
+        {
+            "model_name": "Stacking",
+            "accuracy": 85.33,
+            "precision": 88.19,
+            "recall": 94.12,
+            "f1_score": 91.06,
+            "roc_auc": 86.45,
+            "confusion_matrix": [
+                [
+                    32,
+                    30
+                ],
+                [
+                    14,
+                    224
+                ]
+            ]
+        }
+    ]
+}
