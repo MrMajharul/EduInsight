@@ -35,7 +35,7 @@ export default function CareerGuidancePage() {
     };
 
     try {
-      const res = await fetch('http://localhost:8001/api/career', {
+      const res = await fetch('http://localhost:8000/api/career', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

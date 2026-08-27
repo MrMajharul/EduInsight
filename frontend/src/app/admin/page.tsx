@@ -10,7 +10,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     // In a real application we would fetch from the backend. 
     // We can simulate fetching the local file or directly load dummy data for the showcase.
-    fetch('http://localhost:8001/api/admin/analytics')
+    fetch('http://localhost:8000/api/admin/analytics')
       .then(res => res.json())
       .then(result => {
         // Sort models by accuracy

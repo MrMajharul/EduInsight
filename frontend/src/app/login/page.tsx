@@ -16,7 +16,7 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:8001/api/auth/login', {
+      const res = await fetch('http://localhost:8000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -28,7 +28,7 @@ export default function Login() {
         
         // If they already have a profile, ideally we'd check, but for MVP we assume Dashboard
         // Or if they just registered, they go to profile. Let's send them to Dashboard.
-        router.push('/'); 
+        router.push('/overview'); 
       } else {
         const err = await res.json();
         setError(err.detail || 'Login failed');

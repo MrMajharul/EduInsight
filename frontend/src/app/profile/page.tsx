@@ -36,7 +36,7 @@ export default function ProfileSetup() {
   const handleSubmit = async () => {
     // Save Module 1 Profile
     try {
-      await fetch('http://localhost:8001/api/students/profile', {
+      await fetch('http://localhost:8000/api/students/profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

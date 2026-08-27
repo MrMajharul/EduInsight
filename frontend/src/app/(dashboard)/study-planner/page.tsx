@@ -31,7 +31,7 @@ export default function StudyPlannerPage() {
     };
 
     try {
-      const res = await fetch('http://localhost:8001/api/planner', {
+      const res = await fetch('http://localhost:8000/api/planner', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

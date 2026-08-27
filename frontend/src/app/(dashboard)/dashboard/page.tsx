@@ -37,7 +37,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       // Fetch Risk Prediction
-      const riskRes = await fetch('http://localhost:8001/api/predictions/risk', {
+      const riskRes = await fetch('http://localhost:8000/api/predictions/risk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mlInputs)
@@ -45,7 +45,7 @@ export default function Dashboard() {
       const riskResult = await riskRes.json();
       
       // Fetch Performance Prediction
-      const perfRes = await fetch('http://localhost:8001/api/predictions/performance', {
+      const perfRes = await fetch('http://localhost:8000/api/predictions/performance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mlInputs)
@@ -53,7 +53,7 @@ export default function Dashboard() {
       const perfResult = await perfRes.json();
 
       // Fetch Explainable AI Data
-      const explainRes = await fetch('http://localhost:8001/api/predictions/explain', {
+      const explainRes = await fetch('http://localhost:8000/api/predictions/explain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mlInputs)

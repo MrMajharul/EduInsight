@@ -22,7 +22,7 @@ export default function ExamPrepPage() {
     setShowAnswers(false);
     
     try {
-      const res = await fetch('http://localhost:8001/api/exam-prep', {
+      const res = await fetch('http://localhost:8000/api/exam-prep', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
