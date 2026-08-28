@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { AlertCircle, TrendingUp, BookOpen, Briefcase, GraduationCap, Clock, CheckCircle2, Sliders, Activity } from 'lucide-react';
+import { AlertCircle, TrendingUp, BookOpen, Briefcase, GraduationCap, Clock, CheckCircle2, Sliders, Activity, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Dashboard() {
   // ML Input State
@@ -36,7 +37,6 @@ export default function Dashboard() {
   const runAnalytics = async () => {
     setLoading(true);
     try {
-      // Fetch Risk Prediction
       const riskRes = await fetch('http://localhost:8000/api/predictions/risk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -44,7 +44,6 @@ export default function Dashboard() {
       });
       const riskResult = await riskRes.json();
       
-      // Fetch Performance Prediction
       const perfRes = await fetch('http://localhost:8000/api/predictions/performance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -52,7 +51,6 @@ export default function Dashboard() {
       });
       const perfResult = await perfRes.json();
 
-      // Fetch Explainable AI Data
       const explainRes = await fetch('http://localhost:8000/api/predictions/explain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -64,7 +62,6 @@ export default function Dashboard() {
       setPerformanceData(perfResult);
       setExplainData(explainResult);
 
-      // Update the chart to reflect the new predicted GPA
       setGpaData([
         { term: 'Fall 2024', gpa: mlInputs.previous_gpa },
         { term: 'Spring 2025', gpa: mlInputs.current_gpa },
@@ -88,7 +85,6 @@ export default function Dashboard() {
     
     let numVal = Number(value);
     
-    // Logical bounds checking
     if (name.includes('gpa') && numVal > 4.0) numVal = 4.0;
     if ((name.includes('marks') || name.includes('pct') || name.includes('average')) && numVal > 100) numVal = 100;
     if (name === 'study_hours' && numVal > 24) numVal = 24;
@@ -101,201 +97,311 @@ export default function Dashboard() {
     }));
   };
 
+  // Animation variants
+  const containerVars = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVars = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  };
+
+  // Get dynamic colors based on risk
+  const getRiskColors = () => {
+    if (!riskData) return { border: 'border-emerald-500/20', bg: 'bg-emerald-500/5', text: 'text-emerald-400', shadow: 'shadow-[0_0_40px_rgba(16,185,129,0.1)]', glow: 'bg-emerald-500' };
+    if (riskData.risk_level === 'HIGH') return { border: 'border-rose-500/30', bg: 'bg-rose-500/10', text: 'text-rose-400', shadow: 'shadow-[0_0_50px_rgba(244,63,94,0.15)]', glow: 'bg-rose-500' };
+    if (riskData.risk_level === 'MEDIUM') return { border: 'border-amber-500/30', bg: 'bg-amber-500/10', text: 'text-amber-400', shadow: 'shadow-[0_0_50px_rgba(245,158,11,0.15)]', glow: 'bg-amber-500' };
+    return { border: 'border-emerald-500/30', bg: 'bg-emerald-500/10', text: 'text-emerald-400', shadow: 'shadow-[0_0_50px_rgba(16,185,129,0.15)]', glow: 'bg-emerald-500' };
+  };
+
+  const riskTheme = getRiskColors();
+
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 p-8 font-sans selection:bg-emerald-500/30">
+    <div className="relative min-h-screen bg-[#030303] text-zinc-100 font-sans selection:bg-emerald-500/30 overflow-hidden">
       
-      {/* Header */}
-      <header className="mb-8 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-            <GraduationCap className="text-emerald-400" size={24} />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-zinc-100 to-zinc-500 bg-clip-text text-transparent">EduInsight AI</h1>
-            <p className="text-zinc-500 text-sm">Interactive ML Dashboard Showcase</p>
-          </div>
-        </div>
-        <button 
-          onClick={runAnalytics}
-          disabled={loading}
-          className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-3 px-6 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] flex items-center gap-2 disabled:opacity-50"
-        >
-          {loading ? 'Running Inference...' : 'Run ML Analytics'} <Activity size={18} />
-        </button>
-      </header>
+      {/* Background Ambient Glows */}
+      <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vh] bg-emerald-900/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vh] bg-blue-900/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
 
-      <main className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      <div className="relative z-10 p-4 md:p-8 max-w-[1920px] mx-auto">
         
-        {/* ML Control Panel */}
-        <div className="xl:col-span-3 bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 h-fit">
-          <div className="flex items-center gap-2 mb-6 border-b border-zinc-800 pb-4">
-            <Sliders className="text-blue-400" size={18} />
-            <h3 className="text-zinc-100 font-semibold">ML Control Panel</h3>
-          </div>
-
-          <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
-            <div>
-              <label className="block text-xs text-zinc-400 mb-1">Attendance (%) - {mlInputs.attendance_pct}%</label>
-              <input type="range" name="attendance_pct" min="0" max="100" value={mlInputs.attendance_pct} onChange={handleChange} className="w-full accent-emerald-500" />
+        {/* Header */}
+        <motion.header 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+        >
+          <div className="flex items-center gap-4">
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 flex items-center justify-center border border-white/10 shadow-lg backdrop-blur-md">
+              <Sparkles className="text-emerald-400" size={24} />
             </div>
             <div>
-              <label className="block text-xs text-zinc-400 mb-1">Study Hours/Day - {mlInputs.study_hours}h</label>
-              <input type="range" name="study_hours" min="0" max="10" step="0.5" value={mlInputs.study_hours} onChange={handleChange} className="w-full accent-blue-500" />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block text-xs text-zinc-400 mb-1">Prev GPA</label>
-                <input type="number" step="0.1" name="previous_gpa" value={mlInputs.previous_gpa} onChange={handleChange} className="w-full bg-zinc-950/50 border border-zinc-800 rounded-lg p-2 text-sm text-white" />
-              </div>
-              <div>
-                <label className="block text-xs text-zinc-400 mb-1">Curr GPA</label>
-                <input type="number" step="0.1" name="current_gpa" value={mlInputs.current_gpa} onChange={handleChange} className="w-full bg-zinc-950/50 border border-zinc-800 rounded-lg p-2 text-sm text-white" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs text-zinc-400 mb-1">Midterm Marks (%)</label>
-              <input type="number" name="midterm_marks" value={mlInputs.midterm_marks} onChange={handleChange} className="w-full bg-zinc-950/50 border border-zinc-800 rounded-lg p-2 text-sm text-white" />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block text-xs text-zinc-400 mb-1">Failed Courses</label>
-                <input type="number" name="previous_failed_courses" value={mlInputs.previous_failed_courses} onChange={handleChange} className="w-full bg-zinc-950/50 border border-zinc-800 rounded-lg p-2 text-sm text-white" />
-              </div>
-              <div>
-                <label className="block text-xs text-zinc-400 mb-1">Course Load</label>
-                <input type="number" name="course_load" value={mlInputs.course_load} onChange={handleChange} className="w-full bg-zinc-950/50 border border-zinc-800 rounded-lg p-2 text-sm text-white" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs text-zinc-400 mb-1">Study Frequency</label>
-              <select name="study_frequency" value={mlInputs.study_frequency} onChange={handleChange} className="w-full bg-zinc-950/50 border border-zinc-800 rounded-lg p-2 text-sm text-white focus:outline-none">
-                <option>Low</option><option>Medium</option><option>High</option>
-              </select>
+              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent tracking-tight">
+                EduInsight AI
+              </h1>
+              <p className="text-zinc-400 text-sm font-medium mt-1 tracking-wide">Predictive Analytics Engine</p>
             </div>
           </div>
-        </div>
+          <motion.button 
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={runAnalytics}
+            disabled={loading}
+            className="group relative overflow-hidden bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white font-semibold py-3 px-8 rounded-2xl transition-all shadow-xl flex items-center gap-3 disabled:opacity-50"
+          >
+            {/* Button Hover Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative z-10 flex items-center gap-2">
+              {loading ? 'Processing Data...' : 'Run Analytics'}
+              <Activity size={18} className={loading ? "animate-spin text-emerald-400" : "text-emerald-400 group-hover:rotate-12 transition-transform"} />
+            </span>
+          </motion.button>
+        </motion.header>
 
-        {/* Dashboard Content */}
-        <div className="xl:col-span-9 flex flex-col gap-6">
+        <motion.main 
+          variants={containerVars}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 xl:grid-cols-12 gap-6 md:gap-8"
+        >
           
-          {/* Stats Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* ML Control Panel */}
+          <motion.div variants={itemVars} className="xl:col-span-3 bg-white/[0.02] backdrop-blur-2xl border border-white/10 rounded-3xl p-6 h-fit shadow-2xl relative overflow-hidden group">
+            {/* Subtle inner glow */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             
-            {/* Risk Card */}
-            <div className={`border rounded-2xl p-6 transition-all ${riskData?.risk_level === 'HIGH' ? 'bg-rose-950/30 border-rose-500/50' : riskData?.risk_level === 'MEDIUM' ? 'bg-orange-950/30 border-orange-500/50' : 'bg-emerald-950/20 border-emerald-500/30'}`}>
-              <div className="flex items-center gap-2 mb-4">
-                <AlertCircle className={riskData?.risk_level === 'HIGH' ? 'text-rose-400' : 'text-emerald-400'} size={18} />
-                <h3 className="text-zinc-300 font-medium">Model Output: Academic Risk</h3>
+            <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+              <div className="p-2 bg-blue-500/10 rounded-xl border border-blue-500/20">
+                <Sliders className="text-blue-400" size={18} />
               </div>
-              <div className="flex items-baseline gap-3">
-                <span className={`text-4xl font-bold ${riskData?.risk_level === 'HIGH' ? 'text-rose-400' : riskData?.risk_level === 'MEDIUM' ? 'text-orange-400' : 'text-emerald-400'}`}>
-                  {riskData ? riskData.risk_level : "PENDING"}
-                </span>
-              </div>
-              <div className="mt-4 pt-4 border-t border-zinc-800/50">
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-zinc-400">Pass Probability</span>
-                  <span className="text-zinc-200 font-bold">{riskData ? `${(riskData.pass_probability * 100).toFixed(1)}%` : '--'}</span>
-                </div>
-                <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full ${riskData?.risk_level === 'HIGH' ? 'bg-rose-500' : 'bg-emerald-500'}`} style={{ width: riskData ? `${riskData.pass_probability * 100}%` : '0%' }}></div>
-                </div>
-              </div>
+              <h3 className="text-zinc-100 font-semibold tracking-wide">Parameters</h3>
             </div>
 
-            {/* Performance Card */}
-            <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 transition-all">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="text-blue-400" size={18} />
-                <h3 className="text-zinc-300 font-medium">Model Output: Expected Performance</h3>
+            <div className="space-y-5 max-h-[70vh] overflow-y-auto pr-3 custom-scrollbar">
+              <div className="space-y-1.5">
+                <label className="flex justify-between text-xs text-zinc-400 font-medium">
+                  <span>Attendance</span>
+                  <span className="text-zinc-200">{mlInputs.attendance_pct}%</span>
+                </label>
+                <input type="range" name="attendance_pct" min="0" max="100" value={mlInputs.attendance_pct} onChange={handleChange} className="w-full accent-emerald-500 h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer" />
               </div>
-              <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-zinc-100">{performanceData ? performanceData.predicted_gpa.toFixed(2) : "--"}</span>
-                <span className="text-zinc-500 text-sm">/ 4.0 GPA</span>
+              
+              <div className="space-y-1.5">
+                <label className="flex justify-between text-xs text-zinc-400 font-medium">
+                  <span>Study Hours/Day</span>
+                  <span className="text-zinc-200">{mlInputs.study_hours}h</span>
+                </label>
+                <input type="range" name="study_hours" min="0" max="10" step="0.5" value={mlInputs.study_hours} onChange={handleChange} className="w-full accent-blue-500 h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer" />
               </div>
-              <div className="mt-4 pt-4 border-t border-zinc-800/50 flex justify-between text-sm">
-                <span className="text-zinc-400">Predicted Final Marks</span>
-                <span className="text-blue-400 font-bold">{performanceData ? `${performanceData.predicted_marks.toFixed(1)}%` : '--'}</span>
+              
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="space-y-1.5">
+                  <label className="block text-xs text-zinc-400 font-medium">Prev GPA</label>
+                  <input type="number" step="0.1" name="previous_gpa" value={mlInputs.previous_gpa} onChange={handleChange} className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all hover:bg-black/60" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="block text-xs text-zinc-400 font-medium">Curr GPA</label>
+                  <input type="number" step="0.1" name="current_gpa" value={mlInputs.current_gpa} onChange={handleChange} className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all hover:bg-black/60" />
+                </div>
+              </div>
+              
+              <div className="space-y-1.5 pt-2">
+                <label className="block text-xs text-zinc-400 font-medium">Midterm Marks (%)</label>
+                <input type="number" name="midterm_marks" value={mlInputs.midterm_marks} onChange={handleChange} className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all hover:bg-black/60" />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="space-y-1.5">
+                  <label className="block text-xs text-zinc-400 font-medium">Fails</label>
+                  <input type="number" name="previous_failed_courses" value={mlInputs.previous_failed_courses} onChange={handleChange} className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all hover:bg-black/60" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="block text-xs text-zinc-400 font-medium">Load</label>
+                  <input type="number" name="course_load" value={mlInputs.course_load} onChange={handleChange} className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all hover:bg-black/60" />
+                </div>
+              </div>
+              
+              <div className="space-y-1.5 pt-2">
+                <label className="block text-xs text-zinc-400 font-medium">Study Frequency</label>
+                <select name="study_frequency" value={mlInputs.study_frequency} onChange={handleChange} className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all hover:bg-black/60 appearance-none">
+                  <option>Low</option><option>Medium</option><option>High</option>
+                </select>
               </div>
             </div>
+          </motion.div>
 
-          </div>
-
-          {/* Charts Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Dashboard Content */}
+          <div className="xl:col-span-9 flex flex-col gap-6 md:gap-8">
             
-            {/* GPA Trend */}
-            <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6">
-              <h3 className="text-zinc-400 font-medium mb-6 flex justify-between">
-                <span>Dynamic GPA Trajectory</span>
-                {performanceData && <span className="text-xs text-blue-400 bg-blue-500/10 px-2 py-1 rounded">Live Prediction</span>}
-              </h3>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={gpaData}>
-                    <defs>
-                      <linearGradient id="colorGpa" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#60a5fa" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#60a5fa" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-                    <XAxis dataKey="term" stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} />
-                    <YAxis domain={[0.0, 4.0]} stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} />
-                    <RechartsTooltip 
-                      contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px' }}
-                      itemStyle={{ color: '#e4e4e7' }}
-                    />
-                    <Area type="monotone" dataKey="gpa" stroke="#60a5fa" strokeWidth={3} fillOpacity={1} fill="url(#colorGpa)" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+            {/* Stats Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              
+              {/* Risk Card */}
+              <motion.div variants={itemVars} className={`relative overflow-hidden bg-white/[0.02] backdrop-blur-2xl border ${riskTheme.border} rounded-3xl p-8 transition-all duration-700 ${riskTheme.shadow} group`}>
+                <div className={`absolute top-0 right-0 w-32 h-32 ${riskTheme.glow} blur-[80px] opacity-20 rounded-full`} />
+                <div className="flex items-center gap-3 mb-6 relative z-10">
+                  <div className={`p-2 rounded-xl border ${riskTheme.border} ${riskTheme.bg}`}>
+                    <AlertCircle className={riskTheme.text} size={20} />
+                  </div>
+                  <h3 className="text-zinc-300 font-medium tracking-wide">Academic Risk Assessment</h3>
+                </div>
+                <div className="flex items-baseline gap-4 relative z-10">
+                  <span className={`text-5xl font-black tracking-tighter ${riskTheme.text} drop-shadow-md`}>
+                    {riskData ? riskData.risk_level : "PENDING"}
+                  </span>
+                </div>
+                <div className="mt-8 pt-6 border-t border-white/5 relative z-10">
+                  <div className="flex justify-between text-sm mb-3">
+                    <span className="text-zinc-400 font-medium">Model Confidence (Pass)</span>
+                    <span className="text-zinc-100 font-bold tracking-wide">{riskData ? `${(riskData.pass_probability * 100).toFixed(1)}%` : '--'}</span>
+                  </div>
+                  <div className="h-2 w-full bg-black/50 rounded-full overflow-hidden border border-white/5 p-px">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: riskData ? `${riskData.pass_probability * 100}%` : '0%' }}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                      className={`h-full rounded-full ${riskTheme.glow} relative`}
+                    >
+                      <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse" />
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
 
-            {/* Explainable AI Box */}
-            <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-4">
+              {/* Performance Card */}
+              <motion.div variants={itemVars} className="relative overflow-hidden bg-white/[0.02] backdrop-blur-2xl border border-white/10 hover:border-blue-500/30 rounded-3xl p-8 transition-all duration-500 shadow-xl group">
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500 blur-[80px] opacity-10 rounded-full group-hover:opacity-20 transition-opacity duration-500" />
+                <div className="flex items-center gap-3 mb-6 relative z-10">
+                  <div className="p-2 bg-blue-500/10 rounded-xl border border-blue-500/20">
+                    <TrendingUp className="text-blue-400" size={20} />
+                  </div>
+                  <h3 className="text-zinc-300 font-medium tracking-wide">Expected Performance</h3>
+                </div>
+                <div className="flex items-baseline gap-3 relative z-10">
+                  <span className="text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-400 drop-shadow-sm">
+                    {performanceData ? performanceData.predicted_gpa.toFixed(2) : "--"}
+                  </span>
+                  <span className="text-zinc-500 font-medium">/ 4.0 GPA</span>
+                </div>
+                <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center text-sm relative z-10">
+                  <span className="text-zinc-400 font-medium">Projected Final Marks</span>
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="text-amber-400" size={18} />
-                    <h3 className="text-zinc-100 font-semibold">Explainable AI (Module 7)</h3>
+                    <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-400 font-bold shadow-sm">
+                      {performanceData ? `${performanceData.predicted_marks.toFixed(1)}%` : '--'}
+                    </span>
                   </div>
-                  {explainData && <span className="bg-amber-500/10 text-amber-500 text-[10px] px-2 py-1 rounded-full uppercase tracking-wider font-bold">LIME / SHAP</span>}
                 </div>
-                
-                {!explainData ? (
-                  <p className="text-sm text-zinc-400 leading-relaxed">
-                    Run ML Analytics to see a breakdown of the key factors influencing the model's risk prediction.
-                  </p>
-                ) : (
-                  <div className="space-y-4">
-                    <p className="text-sm text-zinc-300">
-                      The ML model determined you are <strong className={riskData?.risk_level === 'HIGH' ? 'text-rose-400' : 'text-emerald-400'}>{riskData?.risk_level} RISK</strong>. Here is why:
-                    </p>
-                    <div className="space-y-3">
-                      {explainData.explanation && Object.entries(explainData.explanation).map(([feature, value]: [string, any], idx) => {
-                        const isNegative = typeof value === 'string' && (value.includes('Low') || value.includes('Poor'));
-                        const isLowNum = typeof value === 'number' && value < 60;
-                        const isRiskFactor = riskData?.risk_level === 'HIGH' && (isNegative || isLowNum);
-                        
-                        return (
-                          <div key={idx} className={`flex items-center justify-between p-2 rounded-lg border ${isRiskFactor ? 'bg-rose-500/10 border-rose-500/20' : 'bg-zinc-800/50 border-zinc-700/50'}`}>
-                            <span className="text-sm text-zinc-300 capitalize">{feature.replace('_', ' ')}</span>
-                            <span className={`text-sm font-bold ${isRiskFactor ? 'text-rose-400' : 'text-zinc-100'}`}>
-                              {value}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
+              </motion.div>
+
             </div>
 
+            {/* Charts Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 h-full">
+              
+              {/* GPA Trend */}
+              <motion.div variants={itemVars} className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 hover:border-white/20 rounded-3xl p-6 md:p-8 transition-all duration-500 shadow-xl flex flex-col min-h-[400px]">
+                <h3 className="text-zinc-300 font-medium mb-8 flex justify-between items-center tracking-wide">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
+                      <Activity className="text-indigo-400" size={18} />
+                    </div>
+                    <span>GPA Trajectory</span>
+                  </div>
+                  {performanceData && <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-3 py-1.5 rounded-full uppercase tracking-widest border border-blue-500/20">Live Prediction</span>}
+                </h3>
+                <div className="flex-1 min-h-[250px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={gpaData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorGpa" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#818cf8" stopOpacity={0.4}/>
+                          <stop offset="95%" stopColor="#818cf8" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff0a" vertical={false} />
+                      <XAxis dataKey="term" stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} dy={10} />
+                      <YAxis domain={[0.0, 4.0]} stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} dx={-10} />
+                      <RechartsTooltip 
+                        contentStyle={{ backgroundColor: 'rgba(9, 9, 11, 0.9)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)' }}
+                        itemStyle={{ color: '#e4e4e7', fontWeight: 600 }}
+                        cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 2, strokeDasharray: '4 4' }}
+                      />
+                      <Area type="monotone" dataKey="gpa" stroke="#818cf8" strokeWidth={4} fillOpacity={1} fill="url(#colorGpa)" activeDot={{ r: 6, fill: '#818cf8', stroke: '#000', strokeWidth: 2 }} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </motion.div>
+
+              {/* Explainable AI Box */}
+              <motion.div variants={itemVars} className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 hover:border-white/20 rounded-3xl p-6 md:p-8 flex flex-col justify-between transition-all duration-500 shadow-xl min-h-[400px]">
+                <div>
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-amber-500/10 rounded-xl border border-amber-500/20">
+                        <BookOpen className="text-amber-400" size={18} />
+                      </div>
+                      <h3 className="text-zinc-100 font-semibold tracking-wide">Explainable AI</h3>
+                    </div>
+                    {explainData && <span className="bg-amber-500/10 text-amber-500 text-[10px] px-3 py-1.5 rounded-full uppercase tracking-widest font-bold border border-amber-500/20">SHAP values</span>}
+                  </div>
+                  
+                  {!explainData ? (
+                    <div className="flex flex-col items-center justify-center h-48 text-center px-4">
+                      <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                        <Sparkles className="text-zinc-500" size={24} />
+                      </div>
+                      <p className="text-sm text-zinc-400 leading-relaxed font-medium">
+                        Run analytics to unveil the hidden factors driving your prediction model.
+                      </p>
+                    </div>
+                  ) : (
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="space-y-6"
+                    >
+                      <p className="text-sm text-zinc-300 leading-relaxed">
+                        Model classification rationale for <strong className={`${riskTheme.text} font-bold px-2 py-0.5 rounded bg-white/5 mx-1 border ${riskTheme.border}`}>{riskData?.risk_level} RISK</strong>:
+                      </p>
+                      <div className="space-y-3">
+                        <AnimatePresence>
+                          {explainData.explanation && Object.entries(explainData.explanation).map(([feature, value]: [string, any], idx) => {
+                            const isNegative = typeof value === 'string' && (value.includes('Low') || value.includes('Poor'));
+                            const isLowNum = typeof value === 'number' && value < 60;
+                            const isRiskFactor = riskData?.risk_level === 'HIGH' && (isNegative || isLowNum);
+                            
+                            return (
+                              <motion.div 
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                                key={idx} 
+                                className={`flex items-center justify-between p-3.5 rounded-2xl border ${isRiskFactor ? 'bg-rose-500/10 border-rose-500/20' : 'bg-black/30 border-white/5'} hover:bg-black/50 transition-colors`}
+                              >
+                                <span className="text-sm text-zinc-400 capitalize font-medium">{feature.replace('_', ' ')}</span>
+                                <span className={`text-sm font-bold ${isRiskFactor ? 'text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]' : 'text-zinc-100'}`}>
+                                  {value}
+                                </span>
+                              </motion.div>
+                            );
+                          })}
+                        </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+
+            </div>
           </div>
-        </div>
-      </main>
+        </motion.main>
+      </div>
     </div>
   );
 }

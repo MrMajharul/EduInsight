@@ -11,7 +11,8 @@ import {
   FolderKanban, 
   Settings,
   Sparkles,
-  AlertTriangle
+  AlertTriangle,
+  LogOut
 } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -71,14 +72,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* User Profile Badge */}
         <div className="p-4 border-t border-zinc-800/60">
-          <div className="flex items-center gap-3 bg-[#111622] border border-zinc-800 rounded-xl p-3">
-            <div className="h-8 w-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-              {userName.charAt(0).toUpperCase()}
+          <div className="flex items-center justify-between bg-[#111622] border border-zinc-800 rounded-xl p-3">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                {userName.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-white truncate max-w-[120px]">{userName}</span>
+                <span className="text-[10px] text-zinc-500">Active Learner</span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-white truncate max-w-[120px]">{userName}</span>
-              <span className="text-[10px] text-zinc-500">Active Learner</span>
-            </div>
+            <button 
+              onClick={() => {
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                window.location.href = '/login';
+              }} 
+              className="text-zinc-500 hover:text-red-400 transition-colors p-1 rounded-md hover:bg-red-400/10" 
+              title="Log out"
+            >
+              <LogOut size={16} />
+            </button>
           </div>
         </div>
       </aside>
