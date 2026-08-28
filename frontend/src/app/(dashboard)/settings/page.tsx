@@ -5,13 +5,37 @@ import { User, BookOpen, Clock, Activity, Save, ShieldCheck } from 'lucide-react
 export default function AcademicDataHub() {
   const [activeTab, setActiveTab] = useState('profile');
   const [loading, setLoading] = useState(false);
+  const [profileData, setProfileData] = useState(() => {
+    const defaultProfile = {
+      university: 'Tech University',
+      semester: 'Spring 2026',
+      batch: 'Batch 22 (Junior)'
+    };
 
-  const handleSave = () => {
+    if (typeof window === 'undefined') return defaultProfile;
+
+    const storedProfile = localStorage.getItem('academic_profile');
+    if (!storedProfile) return defaultProfile;
+
+    try {
+      return { ...defaultProfile, ...JSON.parse(storedProfile) };
+    } catch {
+      localStorage.removeItem('academic_profile');
+      return defaultProfile;
+    }
+  });
+
+  const handleSave = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      localStorage.setItem('academic_profile', JSON.stringify(profileData));
       alert('Data updated successfully! ML Models will now use this data.');
-    }, 800);
+    } catch (error) {
+      console.error(error);
+      alert('Unable to save your profile.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -60,9 +84,9 @@ export default function AcademicDataHub() {
               <div className="animate-in fade-in space-y-6">
                 <h3 className="text-xl font-bold text-white mb-6 border-b border-zinc-800 pb-4">Basic Profile</h3>
                 <div className="grid grid-cols-2 gap-6">
-                  <div><label className="block text-sm text-zinc-400 mb-2">University</label><input type="text" defaultValue="Tech University" className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2.5 px-4 text-white" /></div>
-                  <div><label className="block text-sm text-zinc-400 mb-2">Semester</label><input type="text" defaultValue="Spring 2026" className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2.5 px-4 text-white" /></div>
-                  <div><label className="block text-sm text-zinc-400 mb-2">Batch / Year</label><input type="text" defaultValue="Batch 22 (Junior)" className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2.5 px-4 text-white" /></div>
+                  <div><label className="block text-sm text-zinc-400 mb-2">University</label><input type="text" value={profileData.university} onChange={e => setProfileData({...profileData, university: e.target.value})} className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2.5 px-4 text-white" /></div>
+                  <div><label className="block text-sm text-zinc-400 mb-2">Semester</label><input type="text" value={profileData.semester} onChange={e => setProfileData({...profileData, semester: e.target.value})} className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2.5 px-4 text-white" /></div>
+                  <div><label className="block text-sm text-zinc-400 mb-2">Batch / Year</label><input type="text" value={profileData.batch} onChange={e => setProfileData({...profileData, batch: e.target.value})} className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2.5 px-4 text-white" /></div>
                   <div>
                     <label className="block text-sm text-zinc-400 mb-2">Profile Photo Status</label>
                     <div className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl"><ShieldCheck size={18} /> Uploaded & Verified</div>
