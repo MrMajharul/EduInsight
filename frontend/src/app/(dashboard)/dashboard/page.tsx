@@ -308,8 +308,8 @@ export default function Dashboard() {
               <motion.div variants={itemVars} className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 hover:border-white/20 rounded-3xl p-6 md:p-8 transition-all duration-500 shadow-xl flex flex-col min-h-[400px]">
                 <h3 className="text-zinc-300 font-medium mb-8 flex justify-between items-center tracking-wide">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
-                      <Activity className="text-indigo-400" size={18} />
+                    <div className="p-2 bg-cyan-500/10 rounded-xl border border-cyan-500/20">
+                      <Activity className="text-cyan-400" size={18} />
                     </div>
                     <span>GPA Trajectory</span>
                   </div>

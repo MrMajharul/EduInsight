@@ -46,12 +46,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Logo */}
           <div className="h-16 flex items-center px-6 border-b border-zinc-800/60">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 bg-indigo-500/20 rounded flex items-center justify-center border border-indigo-500/30">
-                <Sparkles className="text-indigo-400" size={16} />
+              <div className="h-8 w-8 bg-cyan-500/20 rounded flex items-center justify-center border border-cyan-500/30">
+                <Sparkles className="text-cyan-400" size={16} />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-sm leading-tight text-white">Smart Student</span>
-                <span className="text-xs text-indigo-400 font-medium">Success Agent</span>
+                <span className="font-bold text-sm leading-tight text-white">EduInsight</span>
+                <span className="text-xs text-cyan-400 font-medium">AI</span>
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
-                <Link key={item.name} href={item.href} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${isActive ? 'bg-indigo-500 text-white font-medium shadow-[0_4px_14px_rgba(99,102,241,0.3)]' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'} ${item.className || ''}`}>
+                <Link key={item.name} href={item.href} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${isActive ? 'bg-cyan-500 text-white font-medium shadow-[0_4px_14px_rgba(99,102,241,0.3)]' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'} ${item.className || ''}`}>
                   <item.icon size={18} className={isActive ? 'text-white' : 'text-zinc-400'} />
                   {item.name}
                 </Link>
@@ -74,7 +74,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="p-4 border-t border-zinc-800/60">
           <div className="flex items-center justify-between bg-[#111622] border border-zinc-800 rounded-xl p-3">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
+              <div className="h-8 w-8 bg-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
                 {userName.charAt(0).toUpperCase()}
               </div>
               <div className="flex flex-col">
@@ -124,7 +124,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <span className="text-sm font-bold text-white leading-tight truncate max-w-[150px]">{userName}</span>
                 <span className="text-[10px] text-zinc-500">Student Profile</span>
               </div>
-              <div className="h-8 w-8 bg-indigo-900/50 rounded flex items-center justify-center border border-indigo-500/30 text-indigo-400 font-bold text-sm">
+              <div className="h-8 w-8 bg-cyan-900/50 rounded flex items-center justify-center border border-cyan-500/30 text-cyan-400 font-bold text-sm">
                 {userName.charAt(0).toUpperCase()}
               </div>
             </div>

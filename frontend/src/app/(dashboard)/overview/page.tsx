@@ -9,8 +9,8 @@ export default function OverviewPage() {
       title: 'AI Study Planner',
       description: 'Generate optimized daily study schedules leading up to your exam dates, targeting weak topics first.',
       icon: CalendarCheck,
-      color: 'text-indigo-400',
-      bg: 'bg-indigo-500/10 border-indigo-500/20'
+      color: 'text-cyan-400',
+      bg: 'bg-cyan-500/10 border-cyan-500/20'
     },
     {
       id: 2,
@@ -44,28 +44,28 @@ export default function OverviewPage() {
       {/* Hero Section */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#121629] via-[#0b0f19] to-[#0a0a0a] border border-zinc-800/60 p-12">
         {/* Glow Effects */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold tracking-wide mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold tracking-wide mb-6">
             <Sparkles size={14} />
             Agents For Good — Kaggle Capstone
           </div>
           
           <h1 className="text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.1] mb-6">
             Empower Your Academic & <br />
-            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
               Career Success Journey
             </span>
           </h1>
           
           <p className="text-lg text-zinc-400 leading-relaxed mb-8 max-w-2xl">
-            Welcome to the Smart Student Success Agent. Our production-grade AI agents utilize advanced reasoning and structured prompts to build tailored study roadmaps, host mock exams, map out skills, and suggest code portfolios.
+            Welcome to the EduInsight AI. Our production-grade AI agents utilize advanced reasoning and structured prompts to build tailored study roadmaps, host mock exams, map out skills, and suggest code portfolios.
           </p>
           
           <div className="flex items-center gap-4">
-            <button className="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-[0_4px_20px_rgba(99,102,241,0.4)] flex items-center gap-2">
+            <button className="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-[0_4px_20px_rgba(99,102,241,0.4)] flex items-center gap-2">
               Start Study Planner <ArrowRight size={18} />
             </button>
             <Link href="/dashboard" className="bg-zinc-800/50 hover:bg-zinc-800 text-zinc-100 font-medium py-3 px-6 rounded-xl border border-zinc-700 transition-colors">
@@ -78,7 +78,7 @@ export default function OverviewPage() {
       {/* Agents Grid */}
       <section>
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-2">Meet Your AI Success Agents</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Meet Your AI AIs</h2>
           <p className="text-zinc-500 text-sm">Four specialized agents working together to support your progress.</p>
         </div>
 

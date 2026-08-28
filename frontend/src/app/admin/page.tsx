@@ -88,7 +88,7 @@ export default function AdminDashboard() {
           <h3 className="text-slate-400 font-medium mb-1">Testing Samples (20%)</h3>
           <p className="text-4xl font-bold text-purple-400">{data.dataset.testing_samples.toLocaleString()}</p>
         </div>
-        <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 relative overflow-hidden bg-gradient-to-br from-indigo-500/10 to-blue-600/10 border-blue-500/20">
+        <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 relative overflow-hidden bg-gradient-to-br from-cyan-500/10 to-blue-600/10 border-blue-500/20">
           <div className="absolute -right-4 -top-4 opacity-10">
             <Award size={100} className="text-blue-400" />
           </div>

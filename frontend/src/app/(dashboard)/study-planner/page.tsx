@@ -57,8 +57,8 @@ export default function StudyPlannerPage() {
       
       <div>
         <div className="flex items-center gap-3 mb-2">
-          <div className="h-10 w-10 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30">
-            <CalendarCheck className="text-indigo-400" size={20} />
+          <div className="h-10 w-10 bg-cyan-500/20 rounded-xl flex items-center justify-center border border-cyan-500/30">
+            <CalendarCheck className="text-cyan-400" size={20} />
           </div>
           <h1 className="text-3xl font-bold text-white">AI Study Planner</h1>
         </div>
@@ -83,7 +83,7 @@ export default function StudyPlannerPage() {
                     type="text" 
                     value={formData.subject_name}
                     onChange={e => setFormData({...formData, subject_name: e.target.value})}
-                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 pl-10 pr-3 text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 pl-10 pr-3 text-white focus:outline-none focus:border-cyan-500"
                   />
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function StudyPlannerPage() {
                   rows={2}
                   value={formData.weak_topics}
                   onChange={e => setFormData({...formData, weak_topics: e.target.value})}
-                  className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -108,7 +108,7 @@ export default function StudyPlannerPage() {
                       step="0.5"
                       value={formData.daily_hours}
                       onChange={e => setFormData({...formData, daily_hours: parseFloat(e.target.value)})}
-                      className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 pl-10 pr-3 text-white focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 pl-10 pr-3 text-white focus:outline-none focus:border-cyan-500"
                     />
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export default function StudyPlannerPage() {
                     type="date" 
                     value={formData.exam_date}
                     onChange={e => setFormData({...formData, exam_date: e.target.value})}
-                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white focus:outline-none focus:border-cyan-500"
                   />
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default function StudyPlannerPage() {
                   <select 
                     value={formData.current_level} 
                     onChange={e => setFormData({...formData, current_level: e.target.value})}
-                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-cyan-500"
                   >
                     <option>Beginner</option>
                     <option>Intermediate</option>
@@ -141,7 +141,7 @@ export default function StudyPlannerPage() {
                   <select 
                     value={formData.predicted_risk} 
                     onChange={e => setFormData({...formData, predicted_risk: e.target.value})}
-                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-cyan-500"
                   >
                     <option value="HIGH">HIGH</option>
                     <option value="MEDIUM">MEDIUM</option>
@@ -154,7 +154,7 @@ export default function StudyPlannerPage() {
             <button 
               onClick={generatePlan}
               disabled={loading}
-              className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-all shadow-[0_4px_14px_rgba(99,102,241,0.3)] flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full mt-6 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-xl transition-all shadow-[0_4px_14px_rgba(99,102,241,0.3)] flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? 'Generating...' : 'Generate AI Plan'} <Wand2 size={18} />
             </button>
@@ -179,7 +179,7 @@ export default function StudyPlannerPage() {
             )}
 
             {loading && (
-              <div className="h-full flex flex-col items-center justify-center text-indigo-400">
+              <div className="h-full flex flex-col items-center justify-center text-cyan-400">
                 <Wand2 size={48} className="mb-4 animate-pulse" />
                 <p className="animate-pulse font-medium">Gemini AI is crafting your personalized roadmap...</p>
               </div>
@@ -200,13 +200,13 @@ export default function StudyPlannerPage() {
                   {plan.weekly_schedule?.map((week: any, wIdx: number) => (
                     <div key={wIdx} className="space-y-4 relative">
                       <h4 className="font-bold text-white text-lg sticky top-0 bg-[#111622] py-2 z-10 border-b border-zinc-800/50">
-                        Week {week.week_number}: <span className="text-indigo-400">{week.weekly_goal}</span>
+                        Week {week.week_number}: <span className="text-cyan-400">{week.weekly_goal}</span>
                       </h4>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {week.days?.map((day: any, dIdx: number) => (
                           <div key={dIdx} className="bg-[#0a0a0a] border border-zinc-800 rounded-xl p-5 hover:border-zinc-700 transition-colors">
-                            <h5 className="font-bold text-indigo-400 mb-3 flex items-center justify-between">
+                            <h5 className="font-bold text-cyan-400 mb-3 flex items-center justify-between">
                               {day.day_name} 
                               <span className="text-zinc-500 text-xs px-2 py-1 bg-zinc-900 rounded-full">{day.duration_hours}h • {day.priority}</span>
                             </h5>
@@ -217,7 +217,7 @@ export default function StudyPlannerPage() {
                             <ul className="space-y-1.5">
                               {day.activities?.map((act: string, aIdx: number) => (
                                 <li key={aIdx} className="flex items-start gap-2 text-xs text-zinc-400 leading-snug">
-                                  <span className="mt-1 h-1 w-1 rounded-full bg-indigo-500/50 shrink-0"></span> {act}
+                                  <span className="mt-1 h-1 w-1 rounded-full bg-cyan-500/50 shrink-0"></span> {act}
                                 </li>
                               ))}
                             </ul>

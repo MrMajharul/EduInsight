@@ -11,6 +11,10 @@ class UserCreate(BaseModel):
     email: str
     password: str
 
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
 class UserResponse(BaseModel):
     id: int
     full_name: str | None = None
@@ -36,7 +40,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 @router.post("/login", response_model=UserResponse)
-def login(user: UserCreate, db: Session = Depends(get_db)):
+def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
     if not db_user:
         raise HTTPException(status_code=401, detail="Invalid email or password")

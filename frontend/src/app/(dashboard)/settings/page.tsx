@@ -28,7 +28,7 @@ export default function AcademicDataHub() {
         <div className="space-y-2">
           <button 
             onClick={() => setActiveTab('profile')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all border ${activeTab === 'profile' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' : 'bg-transparent text-zinc-400 border-transparent hover:bg-zinc-900'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all border ${activeTab === 'profile' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' : 'bg-transparent text-zinc-400 border-transparent hover:bg-zinc-900'}`}
           >
             <User size={18} /> Student Profile
           </button>
@@ -123,7 +123,7 @@ export default function AcademicDataHub() {
               <button 
                 onClick={handleSave}
                 disabled={loading}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
+                className="bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
               >
                 {loading ? 'Saving Data...' : 'Save Academic Data'} <Save size={18} />
               </button>

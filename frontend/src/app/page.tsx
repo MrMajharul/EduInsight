@@ -71,7 +71,7 @@ export default function LandingPage() {
                   </div>
                   <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-white leading-[1.1] drop-shadow-2xl">
                     Architect Your <br/>
-                    <span className="bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 bg-clip-text text-transparent animate-gradient-x">Academic Success.</span>
+                    <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-purple-500 bg-clip-text text-transparent animate-gradient-x">Academic Success.</span>
                   </h1>
                   <p className="text-lg text-slate-400 max-w-lg leading-relaxed font-light">
                     The ultimate AI ecosystem for university students. 
@@ -287,7 +287,7 @@ export default function LandingPage() {
             {/* CTA SECTION */}
             <section className="py-32 px-4 sm:px-6 relative z-10">
               <div className="max-w-5xl mx-auto">
-                <div className="relative rounded-[2.5rem] bg-gradient-to-br from-blue-900/40 via-indigo-900/40 to-purple-900/40 border border-blue-500/20 p-10 sm:p-20 text-center overflow-hidden shadow-2xl">
+                <div className="relative rounded-[2.5rem] bg-gradient-to-br from-blue-900/40 via-cyan-900/40 to-purple-900/40 border border-blue-500/20 p-10 sm:p-20 text-center overflow-hidden shadow-2xl">
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/20 blur-[100px] rounded-full pointer-events-none"></div>
                   <div className="relative z-10 space-y-8">
                     <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight">Ready to Master Your Studies?</h2>

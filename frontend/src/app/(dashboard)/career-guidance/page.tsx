@@ -74,7 +74,7 @@ export default function CareerGuidancePage() {
         <div className="lg:col-span-4 space-y-6">
           <div className="bg-[#111622] border border-zinc-800 rounded-2xl p-6">
             <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-              <Target className="text-indigo-400" size={18} /> Skill Profile
+              <Target className="text-cyan-400" size={18} /> Skill Profile
             </h3>
             
             <div className="space-y-4">
@@ -249,7 +249,7 @@ export default function CareerGuidancePage() {
                             <span className="font-bold text-white text-sm">{skill.skill_name}</span>
                             <span className="text-zinc-500 text-xs ml-3 hidden md:inline">{skill.action_item}</span>
                           </div>
-                          <span className={`px-2 py-1 rounded text-xs font-bold ${skill.status.toLowerCase() === 'acquired' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`}>
+                          <span className={`px-2 py-1 rounded text-xs font-bold ${skill.status.toLowerCase() === 'acquired' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`}>
                             {skill.status}
                           </span>
                         </div>

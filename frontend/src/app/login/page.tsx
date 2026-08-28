@@ -32,7 +32,13 @@ export default function Login() {
         router.push('/dashboard'); 
       } else {
         const err = await res.json();
-        setError(err.detail || 'Login failed');
+        let errorMessage = 'Login failed';
+        if (typeof err.detail === 'string') {
+          errorMessage = err.detail;
+        } else if (Array.isArray(err.detail) && err.detail.length > 0) {
+          errorMessage = err.detail[0].msg;
+        }
+        setError(errorMessage);
       }
     } catch (err) {
       setError('Network error. Ensure backend is running.');
