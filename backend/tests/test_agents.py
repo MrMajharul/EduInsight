@@ -1,5 +1,5 @@
 import pytest
-from app.models import PlannerRequest, ExamPrepRequest, CareerGuidanceRequest, ProjectRequest, ChatRequest, ChatMessage
+from app.models import PlannerRequest, ExamPrepRequest, CareerGuidanceRequest, ProjectRequest, ChatRequest, ChatMessage, CourseInput
 from app.agents.planner import PlannerAgent
 from app.agents.exam_prep import ExamPrepAgent
 from app.agents.career import CareerAgent
@@ -10,14 +10,14 @@ def test_planner_agent_mock():
     # Test that the planner agent generates a study plan matching the schema
     agent = PlannerAgent(api_key="")
     req = PlannerRequest(
-        subject_name="Databases",
+        semester_name="Spring 2026",
+        courses=[CourseInput(name="Databases", difficulty="Hard", weak_topics=["Normalization", "SQL Joins"])],
         exam_date="2026-07-20",
-        weak_topics=["Normalization", "SQL Joins"],
         daily_hours=2.5,
         current_level="Intermediate"
     )
     res = agent.generate_plan(req)
-    assert res.subject_name == "Databases"
+    assert res.semester_name == "Spring 2026"
     assert len(res.weekly_schedule) > 0
     assert len(res.milestones) > 0
     assert len(res.exam_readiness_checklist) > 0
@@ -41,13 +41,17 @@ def test_career_agent_mock():
     # Test career agent matching schema
     agent = CareerAgent(api_key="")
     req = CareerGuidanceRequest(
+        programming_skills=["Python", "C++"],
+        framework_skills=["React", "FastAPI"],
+        database_skills=["PostgreSQL"],
+        problem_solving="Intermediate",
+        academic_performance="High",
+        projects=["AI Assistant"],
         interests=["AI", "Robots"],
-        target_career="AI Engineer",
-        current_skills=["Python"],
         academic_level="University"
     )
     res = agent.generate_career_guidance(req)
-    assert res.target_career == "AI Engineer"
+    assert res.target_career != ""
     assert len(res.roadmap) > 0
     assert len(res.skills_gap_analysis) > 0
 

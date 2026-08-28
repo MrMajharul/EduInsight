@@ -20,10 +20,15 @@ class Milestone(BaseModel):
     target_date: str = Field(description="Target date or timeline marker (e.g., 'End of Week 2')")
     description: str = Field(description="Details of what should be achieved")
 
-class PlannerRequest(BaseModel):
-    subject_name: str
-    exam_date: str
+class CourseInput(BaseModel):
+    name: str
+    difficulty: str
     weak_topics: List[str]
+
+class PlannerRequest(BaseModel):
+    semester_name: str
+    courses: List[CourseInput]
+    exam_date: str
     daily_hours: float
     current_level: str  # Beginner, Intermediate, Advanced
     predicted_risk: Optional[str] = None
@@ -31,7 +36,7 @@ class PlannerRequest(BaseModel):
     current_progress: Optional[str] = None
 
 class StudyPlan(BaseModel):
-    subject_name: str
+    semester_name: str
     weekly_schedule: List[WeeklySchedule]
     milestones: List[Milestone]
     exam_readiness_checklist: List[str]

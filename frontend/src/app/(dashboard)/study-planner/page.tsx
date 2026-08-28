@@ -8,13 +8,17 @@ export default function StudyPlannerPage() {
   const [error, setError] = useState<string | null>(null);
   
   const [formData, setFormData] = useState({
-    subject_name: 'Database Systems',
-    exam_date: '2026-10-20',
-    weak_topics: 'SQL Joins, Normalization, Concurrency',
-    daily_hours: 3.5,
+    semester_name: 'Fall 2026',
+    exam_date: '2026-12-10',
+    daily_hours: 4.5,
     current_level: 'Intermediate',
     predicted_risk: 'MEDIUM'
   });
+  
+  const [courses, setCourses] = useState([
+    { name: 'Database Systems', difficulty: 'Medium', weak_topics: 'SQL Joins, Normalization' },
+    { name: 'Machine Learning', difficulty: 'Hard', weak_topics: 'Neural Networks' }
+  ]);
 
   const generatePlan = async () => {
     setLoading(true);
@@ -22,9 +26,13 @@ export default function StudyPlannerPage() {
     setPlan(null);
     
     const payload = {
-      subject_name: formData.subject_name,
+      semester_name: formData.semester_name,
+      courses: courses.map(c => ({
+        name: c.name,
+        difficulty: c.difficulty,
+        weak_topics: c.weak_topics.split(',').map(s => s.trim()).filter(Boolean)
+      })),
       exam_date: formData.exam_date,
-      weak_topics: formData.weak_topics.split(',').map(s => s.trim()),
       daily_hours: formData.daily_hours,
       current_level: formData.current_level,
       predicted_risk: formData.predicted_risk
@@ -76,26 +84,74 @@ export default function StudyPlannerPage() {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-zinc-400 mb-1">Target Subject</label>
+                <label className="block text-sm text-zinc-400 mb-1">Semester Name</label>
                 <div className="relative">
                   <BookOpen className="absolute left-3 top-2.5 text-zinc-500" size={16} />
                   <input 
                     type="text" 
-                    value={formData.subject_name}
-                    onChange={e => setFormData({...formData, subject_name: e.target.value})}
+                    value={formData.semester_name}
+                    onChange={e => setFormData({...formData, semester_name: e.target.value})}
                     className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 pl-10 pr-3 text-white focus:outline-none focus:border-cyan-500"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm text-zinc-400 mb-1">Weak Topics (Comma separated)</label>
-                <textarea 
-                  rows={2}
-                  value={formData.weak_topics}
-                  onChange={e => setFormData({...formData, weak_topics: e.target.value})}
-                  className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-cyan-500"
-                />
+              <div className="border-t border-zinc-800 pt-4 mt-4">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-bold text-zinc-300">Semester Courses ({courses.length})</label>
+                  <button onClick={() => setCourses([...courses, { name: '', difficulty: 'Medium', weak_topics: '' }])} className="text-xs text-cyan-400 hover:text-cyan-300 font-medium">+ Add Course</button>
+                </div>
+                
+                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                  {courses.map((course, idx) => (
+                    <div key={idx} className="bg-[#0a0a0a] border border-zinc-800 rounded-xl p-3 relative group">
+                      <button onClick={() => setCourses(courses.filter((_, i) => i !== idx))} className="absolute top-2 right-2 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <AlertCircle size={14}/>
+                      </button>
+                      <input 
+                        type="text" 
+                        placeholder="Course Name"
+                        value={course.name}
+                        onChange={e => {
+                          const newCourses = [...courses];
+                          newCourses[idx].name = e.target.value;
+                          setCourses(newCourses);
+                        }}
+                        className="w-full bg-transparent border-b border-zinc-800 mb-2 py-1 text-sm text-white focus:outline-none focus:border-cyan-500"
+                      />
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="col-span-1">
+                           <select 
+                             value={course.difficulty} 
+                             onChange={e => {
+                               const newCourses = [...courses];
+                               newCourses[idx].difficulty = e.target.value;
+                               setCourses(newCourses);
+                             }}
+                             className="w-full bg-[#111622] border border-zinc-800 rounded-lg py-1 px-2 text-white text-xs focus:outline-none focus:border-cyan-500"
+                           >
+                             <option>Easy</option>
+                             <option>Medium</option>
+                             <option>Hard</option>
+                           </select>
+                        </div>
+                        <div className="col-span-2">
+                          <input 
+                            type="text" 
+                            placeholder="Weak Topics (comma separated)"
+                            value={course.weak_topics}
+                            onChange={e => {
+                              const newCourses = [...courses];
+                              newCourses[idx].weak_topics = e.target.value;
+                              setCourses(newCourses);
+                            }}
+                            className="w-full bg-[#111622] border border-zinc-800 rounded-lg py-1 px-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -189,7 +245,7 @@ export default function StudyPlannerPage() {
               <div className="animate-in fade-in space-y-8">
                 <div className="flex justify-between items-center border-b border-zinc-800 pb-4">
                   <h3 className="text-xl font-bold text-white">
-                    {plan.subject_name} Roadmap
+                    {plan.semester_name} Roadmap
                   </h3>
                   <button className="flex items-center gap-2 text-sm bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-lg transition-colors">
                     <Download size={14} /> Export PDF

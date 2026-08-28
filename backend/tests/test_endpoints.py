@@ -11,16 +11,16 @@ def test_read_root():
 
 def test_planner_endpoint():
     payload = {
-        "subject_name": "Operating Systems",
+        "semester_name": "Spring 2026",
+        "courses": [{"name": "Operating Systems", "difficulty": "Hard", "weak_topics": ["Virtual Memory", "Deadlocks"]}],
         "exam_date": "2026-07-15",
-        "weak_topics": ["Virtual Memory", "Deadlocks"],
         "daily_hours": 3.0,
         "current_level": "Beginner"
     }
     response = client.post("/api/planner", json=payload)
     assert response.status_code == 200
     data = response.json()
-    assert data["subject_name"] == "Operating Systems"
+    assert data["semester_name"] == "Spring 2026"
     assert "weekly_schedule" in data
     assert "milestones" in data
 
@@ -39,15 +39,19 @@ def test_exam_prep_endpoint():
 
 def test_career_endpoint():
     payload = {
+        "programming_skills": ["C", "C++"],
+        "framework_skills": ["Linux Kernel"],
+        "database_skills": ["MySQL"],
+        "problem_solving": "Advanced",
+        "academic_performance": "Medium",
+        "projects": ["Mini OS"],
         "interests": ["Kernel dev", "Security"],
-        "target_career": "Systems Engineer",
-        "current_skills": ["C++", "C"],
         "academic_level": "Polytechnic"
     }
     response = client.post("/api/career", json=payload)
     assert response.status_code == 200
     data = response.json()
-    assert data["target_career"] == "Systems Engineer"
+    assert data["target_career"] != ""
     assert "roadmap" in data
 
 def test_projects_endpoint():

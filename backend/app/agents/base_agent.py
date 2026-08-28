@@ -43,11 +43,11 @@ class BaseAgent:
         """
         if self.is_client_active and self.client:
             try:
-                # We use the modern gemini-2.5-flash model
+                # We use the modern gemini-3.6-flash model
                 logger.info(f"Calling Gemini 2.5 Flash API with prompt: {prompt[:100]}...")
                 
                 response = self.client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-3.6-flash",
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=system_instruction,
@@ -97,7 +97,7 @@ class BaseAgent:
                 
                 # Start chat using chats.create
                 chat = self.client.chats.create(
-                    model="gemini-2.5-flash",
+                    model="gemini-3.6-flash",
                     config=types.GenerateContentConfig(
                         system_instruction=system_instruction,
                         temperature=0.7,
@@ -117,7 +117,7 @@ class BaseAgent:
                 
                 try:
                     q_resp = self.client.models.generate_content(
-                        model="gemini-2.5-flash",
+                        model="gemini-3.6-flash",
                         contents=questions_prompt,
                         config=types.GenerateContentConfig(
                             response_mime_type="application/json"
