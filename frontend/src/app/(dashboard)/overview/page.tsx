@@ -7,6 +7,7 @@ export default function OverviewPage() {
     {
       id: 1,
       title: 'AI Study Planner',
+      href: '/study-planner',
       description: 'Generate optimized daily study schedules leading up to your exam dates, targeting weak topics first.',
       icon: CalendarCheck,
       color: 'text-cyan-400',
@@ -15,6 +16,7 @@ export default function OverviewPage() {
     {
       id: 2,
       title: 'Exam Prep Agent',
+      href: '/exam-prep',
       description: 'Produce structured topic summaries, multiple-choice practice tests (MCQs), and important questions with answers.',
       icon: GraduationCap,
       color: 'text-rose-400',
@@ -23,6 +25,7 @@ export default function OverviewPage() {
     {
       id: 3,
       title: 'Career Guidance Agent',
+      href: '/career-guidance',
       description: 'Analyze your skills, projects, and coursework to generate personalized career pathways and skill roadmaps.',
       icon: Briefcase,
       color: 'text-emerald-400',
@@ -31,6 +34,7 @@ export default function OverviewPage() {
     {
       id: 4,
       title: 'Project Advisor',
+      href: '/projects',
       description: 'Get tailored portfolio project ideas based on your target career role to fill in critical technical gaps.',
       icon: FolderKanban,
       color: 'text-amber-400',
@@ -65,9 +69,9 @@ export default function OverviewPage() {
           </p>
           
           <div className="flex items-center gap-4">
-            <button className="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-[0_4px_20px_rgba(99,102,241,0.4)] flex items-center gap-2">
+            <Link href="/study-planner" className="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-[0_4px_20px_rgba(99,102,241,0.4)] flex items-center gap-2">
               Start Study Planner <ArrowRight size={18} />
-            </button>
+            </Link>
             <Link href="/dashboard" className="bg-zinc-800/50 hover:bg-zinc-800 text-zinc-100 font-medium py-3 px-6 rounded-xl border border-zinc-700 transition-colors">
               View Analytics
             </Link>
@@ -94,9 +98,9 @@ export default function OverviewPage() {
                   {agent.description}
                 </p>
               </div>
-              <button className="mt-6 flex items-center gap-2 text-sm font-bold text-zinc-300 group-hover:text-white transition-colors">
+              <Link href={agent.href} className="mt-6 flex items-center gap-2 text-sm font-bold text-zinc-300 group-hover:text-white transition-colors">
                 Deploy Agent <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
             </div>
           ))}
         </div>
